@@ -65,6 +65,32 @@ const CONFIG = {
   IGNORED_COLUMNS: ["Recategorización", "Aporte"],
 
   // ---------------------------------------------------------------------
+  // IMÁGENES ASIGNADAS A HITOS PUNTUALES
+  // ---------------------------------------------------------------------
+  // El Google Sheet de origen no tiene una columna de imagen, así que las
+  // imágenes se asignan acá, manualmente, hito por hito. Cada entrada se
+  // identifica por Año + el texto EXACTO de la columna "Título" en el
+  // Sheet (mismo mapeo que COLUMNS.headline) y apunta a un archivo dentro
+  // de assets/images/. Si en el futuro el Sheet suma una columna propia
+  // de imagen, esto se puede reemplazar por esa columna (ver README,
+  // "Cómo agregar nuevas columnas"); mientras tanto, para sumar una
+  // imagen a otro hito, agregá una entrada más a esta lista.
+  IMAGE_OVERRIDES: [
+    {
+      anio: 1996,
+      titulo: "Convenio desmotadores-Banco Formosa créditos 50% tasa",
+      src: "assets/images/1996-modelo-formoseno-1.png",
+      alt: "Tapa del libro Modelo Formoseño"
+    },
+    {
+      anio: 1996,
+      titulo: "Fondo Asistencia Producción Primaria creado",
+      src: "assets/images/1996-modelo-formoseno-2.png",
+      alt: "Contratapa del libro Modelo Formoseño"
+    }
+  ],
+
+  // ---------------------------------------------------------------------
   // COLORES POR ESTADO
   // ---------------------------------------------------------------------
   // Se usa el valor tal cual aparece en la columna "estado" del Sheet

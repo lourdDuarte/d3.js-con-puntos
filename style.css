@@ -463,6 +463,13 @@ button {
 .marker:hover {
   stroke: var(--color-text);
 }
+.marker--has-image {
+  stroke: var(--color-accent);
+  stroke-width: 2.5px;
+}
+.marker--has-image:hover {
+  stroke: var(--color-text);
+}
 
 /* ============================ TOOLTIP ============================ */
 
@@ -486,6 +493,13 @@ button {
 .tooltip__meta {
   opacity: 0.75;
   font-size: 11px;
+}
+.tooltip__hint {
+  margin-top: 6px;
+  font-size: 11px;
+  opacity: 0.85;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  padding-top: 6px;
 }
 
 /* ============================ DETAIL PANEL ============================ */
@@ -577,6 +591,17 @@ button {
 .detail-field__value--muted {
   color: var(--color-text-muted);
   font-style: italic;
+}
+
+.detail-field__image {
+  margin: -4px 0 20px;
+}
+.detail-field__image img {
+  width: 100%;
+  display: block;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
 }
 
 /* ============================ RESPONSIVE ============================ */

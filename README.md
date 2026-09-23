@@ -27,9 +27,10 @@ ni reconstruir nada.
 6. [Cómo modificar los colores](#6-cómo-modificar-los-colores)
 7. [Cómo modificar los estilos / el diseño](#7-cómo-modificar-los-estilos--el-diseño)
 8. [Cómo agregar nuevas columnas](#8-cómo-agregar-nuevas-columnas)
-9. [Cómo funciona por dentro (resumen técnico)](#9-cómo-funciona-por-dentro-resumen-técnico)
-10. [Rendimiento](#10-rendimiento)
-11. [Solución de problemas](#11-solución-de-problemas)
+9. [Cómo asignar una imagen a un hito puntual](#9-cómo-asignar-una-imagen-a-un-hito-puntual)
+10. [Cómo funciona por dentro (resumen técnico)](#10-cómo-funciona-por-dentro-resumen-técnico)
+11. [Rendimiento](#11-rendimiento)
+12. [Solución de problemas](#12-solución-de-problemas)
 
 ---
 
@@ -467,7 +468,54 @@ la búsqueda — sin tocar ninguna otra parte del código.
 
 ---
 
-## 9. Cómo funciona por dentro (resumen técnico)
+## 9. Cómo asignar una imagen a un hito puntual
+
+El Google Sheet de origen no tiene una columna de imagen, así que las
+imágenes se asignan a mano, hito por hito, en `config.js`, bloque
+`IMAGE_OVERRIDES`:
+
+```js
+IMAGE_OVERRIDES: [
+  {
+    anio: 1996,
+    titulo: "Convenio desmotadores-Banco Formosa créditos 50% tasa",
+    src: "assets/images/1996-modelo-formoseno-1.png",
+    alt: "Tapa del libro Modelo Formoseño"
+  },
+  // ...una entrada más por cada hito con imagen...
+],
+```
+
+Para agregar una imagen a otro hito:
+
+1. Poné el archivo de imagen dentro de `assets/images/` (creá la
+   carpeta si no existe).
+2. Sumá una entrada al array `IMAGE_OVERRIDES` con:
+   - `anio`: el año exacto del hito (numérico, sin comillas).
+   - `titulo`: el texto **exacto** de la columna "Título" de ese hito
+     en el Google Sheet (mismo mayúsculas/minúsculas, tildes y
+     espacios — copialo y pegalo directo del Sheet para evitar
+     errores de tipeo).
+   - `src`: la ruta al archivo dentro de `assets/images/`.
+   - `alt`: un texto descriptivo corto (se usa como texto alternativo
+     de accesibilidad).
+
+La imagen aparece automáticamente arriba de los datos en el panel de
+detalle de ese hito. Además, el punto correspondiente en el timeline se
+dibuja con un borde de color de acento (en vez del borde blanco
+habitual) para que se note a simple vista que tiene una imagen
+asociada, y el tooltip al pasar el mouse agrega la leyenda "🖼 Tiene
+imagen — click para verla".
+
+Si en algún momento el Sheet suma su propia columna de imagen (por
+ejemplo, un link a Google Drive o a cualquier otro hosting), lo más
+prolijo es reemplazar este mecanismo por esa columna, siguiendo el
+mismo procedimiento que la sección 8 ("Cómo agregar nuevas columnas")
+en vez de mantener la lista manual.
+
+---
+
+## 10. Cómo funciona por dentro (resumen técnico)
 
 `app.js` está organizado en secciones numeradas (0 a 14), cada una con
 un comentario de bloque que la identifica:
@@ -528,7 +576,7 @@ herramientas adicionales.
 
 ---
 
-## 10. Rendimiento
+## 11. Rendimiento
 
 La aplicación está pensada para manejar sin problema miles de eventos:
 
@@ -554,7 +602,7 @@ Sheet antes de traerlos.
 
 ---
 
-## 11. Solución de problemas
+## 12. Solución de problemas
 
 **"No se pudo leer el Google Sheet. Revisá config.js y el README."**
 Este mensaje aparece cuando ninguna de las dos fuentes configuradas

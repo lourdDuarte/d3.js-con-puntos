@@ -58,6 +58,17 @@
     return (CONFIG.COLORS_BY_ESTADO[estado] || CONFIG.COLORS_BY_ESTADO.default);
   }
 
+  // Busca en CONFIG.IMAGE_OVERRIDES si el hito (Año + Título exacto) tiene
+  // una imagen asignada manualmente. Devuelve el objeto { src, alt } o
+  // null si no hay ninguna para ese hito.
+  function findImageOverride(anio, headline) {
+    const list = CONFIG.IMAGE_OVERRIDES || [];
+    const match = list.find(
+      (o) => o.anio === anio && o.titulo.trim() === headline.trim()
+    );
+    return match ? { src: match.src, alt: match.alt || "" } : null;
+  }
+
   // =========================================================================
   // 1. CARGA DE DATOS DESDE GOOGLE SHEETS
   // =========================================================================
@@ -142,6 +153,7 @@
         text: (row[c.text] || "").toString().trim(),
         fuente: (row[c.fuente] || "").toString().trim(),
         estado: (row[c.estado] || "").toString().trim() || "default",
+        imagen: findImageOverride(anio, headline),
         rowOrder: i,
         searchBlob: normalizeForSearch(
           [
@@ -512,6 +524,7 @@
       .attr("cx", (d) => d.x)
       .attr("cy", (d) => d.y)
       .attr("fill", (d) => estadoColor(d.event.estado).fill)
+      .classed("marker--has-image", (d) => !!d.event.imagen)
       .on("mouseenter", (evt, d) => showTooltip(evt, d.event))
       .on("mousemove", (evt) => moveTooltip(evt))
       .on("mouseleave", hideTooltip)
@@ -562,7 +575,8 @@
     const tip = document.getElementById("tooltip");
     tip.innerHTML =
       `<div class="tooltip__headline">${escapeHtml(e.headline)}</div>` +
-      `<div class="tooltip__meta">${escapeHtml(e.estado)} · ${escapeHtml(e.categoria)} · ${e.anio}</div>`;
+      `<div class="tooltip__meta">${escapeHtml(e.estado)} · ${escapeHtml(e.categoria)} · ${e.anio}</div>` +
+      (e.imagen ? `<div class="tooltip__hint">🖼 Tiene imagen — click para verla</div>` : "");
     tip.hidden = false;
     moveTooltip(event);
   }
@@ -600,6 +614,14 @@
         ${escapeHtml(e.estado)}
       </div>
       <h2 class="detail-panel__headline">${escapeHtml(e.headline)}</h2>
+
+      ${
+        e.imagen
+          ? `<div class="detail-field detail-field__image">
+               <img src="${escapeHtml(e.imagen.src)}" alt="${escapeHtml(e.imagen.alt)}" loading="lazy">
+             </div>`
+          : ""
+      }
 
       <div class="detail-field">
         <div class="detail-field__label">Año</div>
